@@ -1,6 +1,6 @@
-# OmniPilot – 企业智能运营助手
+# Rock Kingdom - 洛克王国精灵百科与队伍分析助手
 
-基于多智能体协作的企业级 AI 助手，支持自然语言查询公司文档（RAG）、业务数据库（SQL）、代码生成与报告总结。系统采用 LangGraph 实现智能任务规划与调度，集成 Milvus 向量库、PostgreSQL 数据库、JWT 认证、Prometheus + Grafana 监控，并提供流式输出与 Streamlit 交互界面。
+基于多智能体协作的《洛克王国》游戏精灵百科系统，支持自然语言查询精灵信息、属性克制关系、队伍协同分析等。系统采用 LangGraph 实现智能任务规划与调度，集成 Milvus 向量库存储属性克制知识、PostgreSQL 数据库存储精灵数据，并提供 FastAPI + Streamlit 交互界面。
 
 ## 🏗️ 架构图
 
@@ -15,142 +15,188 @@ flowchart LR
     Planner -->|生成执行计划| Dispatcher[Dispatcher 或 Executor]
     Dispatcher -->|并行/串行调用| Agents[专家智能体]
     
-    Agents --> RAG[RAG Agent<br>知识库检索]
-    Agents --> SQL[Data Analyst<br>数据库查询]
-    Agents --> Researcher[General Researcher<br>通用问答]
+    Agents --> RAG[RAG Agent<br>属性克制知识检索]
+    Agents --> Pokemon[Pokemon Agent<br>精灵数据库查询]
+    Agents --> Team[Team Analyzer<br>队伍协同分析]
     
     RAG --> Milvus[(Milvus 向量库)]
-    SQL --> Postgres[(PostgreSQL 业务库)]
+    Pokemon --> Postgres[(PostgreSQL 精灵库)]
     
     Agents -->|结果汇聚| Summarize[Summarize 总结整合]
     Summarize -->|最终答案| Frontend
-    
-    Prometheus -->|抓取指标| FastAPI
-    Grafana -->|可视化| Prometheus
-🚀 快速开始
-1. 克隆仓库
-bash
-git clone https://github.com/your-username/omnipilot.git
-cd omnipilot
-2. 配置环境变量
-在项目根目录创建 .env 文件，填入你的 API 密钥（需 DeepSeek 或 SiliconFlow 令牌）：
+```
 
-text
+## ## 🚀 快速开始
+
+### 1. 环境要求
+- Python 3.10+
+- PostgreSQL 15+
+- Milvus 2.3+
+- Docker Desktop（可选，用于容器化部署依赖服务）
+
+### 2. 配置环境变量
+在项目根目录创建 `.env` 文件：
+
+```env
 DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxx
 JWT_SECRET_KEY=请生成一个随机字符串
-3. 启动基础服务（Docker）
-确保 Docker Desktop 已安装并运行，然后执行：
+```
 
-bash
+### 3. 启动依赖服务
+
+```bash
+# 使用 Docker 启动 PostgreSQL 和 Milvus
 docker compose up -d
-这将启动 PostgreSQL（含向量扩展）、Milvus、Prometheus、Grafana 等所有依赖服务。
+```
 
-4. 初始化数据库与知识库
-bash
-# 初始化 PostgreSQL 表结构及示例数据
+### 4. 初始化数据
+
+```bash
+# 初始化 PostgreSQL 表结构及精灵数据
 python tools/init_db.py
 
-# 初始化 Milvus 知识库（将 data/documents/ 下的 .txt 文件向量化并存入向量库）
+# 初始化 Milvus 属性克制知识库
 python tools/init_milvus.py
-5. 启动后端
-bash
+```
+
+### 5. 启动服务
+
+```bash
+# 启动后端 API
 uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
-6. 启动前端
-新开一个终端：
 
-bash
+# 新开终端：启动前端
 streamlit run frontend/app.py
-7. 访问系统
-前端界面：http://localhost:8501
-登录用户：zhangwei 密码：secret123
+```
 
-Grafana 监控：http://localhost:3000 （admin/admin）
+### 6. 访问系统
+- 前端界面：http://localhost:8501
+- 后端 API 文档：http://localhost:8000/docs
 
-后端 API 文档：http://localhost:8000/docs
+## 📡 API 文档
 
-📡 API 文档
-端点	方法	描述	认证
-/token	POST	获取 JWT 访问令牌	无（表单 username/password）
-/chat/stream	POST	流式多 Agent 问答	Bearer Token
-/metrics	GET	Prometheus 监控指标	无
-获取 Token 示例
-bash
+| 端点 | 方法 | 描述 | 认证 |
+|------|------|------|------|
+| /token | POST | 获取 JWT 访问令牌 | 无 |
+| /chat/stream | POST | 流式多 Agent 问答 | Bearer Token |
+| /pokemons | GET | 获取所有精灵列表 | Bearer Token |
+| /pokemon/{id} | GET | 获取精灵详细信息 | Bearer Token |
+| /metrics | GET | Prometheus 监控指标 | 无 |
+
+### 获取 Token
+
+```bash
 curl -X POST "http://localhost:8000/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=zhangwei&password=secret123"
-流式问答示例
-bash
+```
+
+### 流式问答示例
+
+```bash
 curl -X POST "http://localhost:8000/chat/stream" \
   -H "Authorization: Bearer <你的token>" \
   -H "Content-Type: application/json" \
-  -d '{"messages":[{"role":"user","content":"找出王磊销售数量最多的产品，并介绍一下这个产品"}]}'
-✨ 主要特性
-🧠 多 Agent 协作：专职 Agent 分别处理数据库查询、知识库检索、通用问答，最后由总结 Agent 整合。
+  -d '{"messages":[{"role":"user","content":"火系精灵被什么属性克制？"}]}'
+```
+## ✨ 主要特性
 
-🗺️ 智能任务规划：Planner 自动拆解复杂问题，决定并行或串行调用专家，并处理子任务依赖。
+### 🤖 多 Agent 协作
+- **Planner**：智能任务规划，分析用户意图并决定调用哪些专家
+- **RAG Agent**：从 Milvus 向量库检索属性克制、被克制、抵抗关系
+- **Pokemon Agent**：查询 PostgreSQL 数据库中的精灵属性、种族值、特性等信息
+- **Team Analyzer**：深度分析队伍打击面、联防弱点、抵抗覆盖
+- **Summarize Agent**：整合多 Agent 结果，生成最终回答
 
-📚 企业级 RAG：基于 Milvus 向量数据库 + 语义分块 + BGE‑Reranker 重排序，检索准确率高。
+### 🧠 智能任务调度
+- 自动识别并行/串行任务关系
+- 例如："先查火系精灵，再分析它们的克制关系" → 串行执行
+- 例如："火系精灵被什么克制？种族值是多少？" → 并行执行
 
-🔐 JWT 认证与数据权限：用户登录后按部门过滤数据，保障信息安全。
+### 📚 属性克制知识库
+- 基于 Milvus 向量数据库存储 18 种单属性 + 双属性组合的克制关系
+- 支持单属性查询（如"火系"）和双属性查询（如"火系+水系"）
+- 包含属性优势、劣势、联防价值分析
 
-📊 Prometheus + Grafana 监控：实时显示 API 请求量、LLM 调用次数、95% 延迟，成本可控。
+### 📊 精灵数据库
+- **pokemon**：精灵基本信息（编号、名称、属性、特性）
+- **pokemon_stats**：种族值详情（HP、物攻、物防、魔攻、魔防、速度）
+- **natures**：性格系统（增益/减益属性）
+- **moves**：技能信息（威力、能量消耗、伤害类别）
+- **pokemon_moves**：精灵可学技能关联
 
-💬 流式输出与打字机效果：通过 Server‑Sent Events (SSE) 实现实时进度反馈和最终答案。
+### 💬 流式输出
+- 通过 Server-Sent Events (SSE) 实现实时进度反馈
+- 打字机效果展示分析过程
 
-🐳 Docker 一键部署：所有依赖服务容器化，一条命令即可启动完整后端基座。
+### 🔐 JWT 认证
+- 用户登录认证
+- Token 有效期管理
 
-🎬 演示视频
-建议录制 2‑3 分钟的视频，展示以下场景：
+## 🎮 支持的精灵属性
 
-在 Streamlit 登录，获取 Token（过程自动，可提及）。
+| 属性 | 属性 | 属性 |
+|------|------|------|
+| 火系 | 水系 | 草系 |
+| 光系 | 恶系 | 幽系 |
+| 普通系 | 地系 | 冰系 |
+| 龙系 | 电系 | 毒系 |
+| 虫系 | 武系 | 翼系 |
+| 萌系 | 机械系 | 幻系 |
 
-提问：“找出王磊销售数量最多的产品，并介绍一下这个产品”。
+## 💡 使用示例
 
-提问：“查询张伟的业绩，并根据公司激励政策计算奖励金额”。
+### 查询精灵信息
+> "火神的属性和种族值是多少？"
 
-打开 Grafana 面板，显示实时请求量和 LLM 调用次数。
+### 查询属性克制
+> "火系被哪些属性克制？"
 
-录制工具：OBS Studio（免费）或系统自带录屏。
-完成后可上传至 Bilibili 或 YouTube，将链接填入 README 尾部。
+### 双属性分析
+> "火系+翼系精灵有什么优劣势？"
 
-🧱 项目结构
-text
-omnipilot/
-├── agents/                # 各智能体节点
-│   ├── planner.py
-│   ├── dispatcher.py
-│   ├── executor.py
-│   ├── rag.py
-│   ├── data_analyst.py
-│   ├── researcher.py
-│   ├── summarize.py
-│   └── supervisor.py     (备用)
-├── tools/                 # 工具封装
-│   ├── retriever.py       # Milvus 检索器
-│   ├── sql_executor.py    # PostgreSQL 执行器
-│   ├── embedder.py        # 嵌入模型
-│   ├── reranker.py        # 重排序
-│   ├── init_db.py         # 数据库初始化
-│   └── init_milvus.py     # 知识库初始化
-├── core/                  # 状态定义、图构建、LLM、Metrics
-│   ├── state.py
-│   ├── graph.py
-│   ├── llm.py
-│   └── metrics.py
-├── api/                   # FastAPI 应用
+### 队伍分析
+> "帮我分析这个队伍的打击面和联防弱点"（配合队伍数据）
+
+### 综合查询
+> "找出种族值最高的火系精灵，并分析它的属性克制关系"
+
+## 🧱 项目结构
+
+```
+rock_kingdom/
+├── agents/                    # 各智能体节点
+│   ├── planner.py            # 任务规划器
+│   ├── dispatcher.py         # 任务分发器
+│   ├── rag_agent.py          # 属性克制知识检索
+│   ├── pokemon_agent.py      # 精灵数据库查询
+│   ├── team_analyzer.py      # 队伍协同分析
+│   └── summarize.py          # 结果总结整合
+├── tools/                     # 工具封装
+│   ├── sql_executor.py       # PostgreSQL 执行器
+│   ├── retriever.py          # Milvus 检索器
+│   ├── rag_tools.py          # RAG 工具
+│   ├── db_tools.py           # 数据库工具
+│   └── team_utils.py         # 队伍分析工具
+├── core/                      # 核心模块
+│   ├── state.py              # 状态定义
+│   ├── graph.py              # LangGraph 工作流
+│   ├── llm.py                # LLM 配置
+│   ├── memory.py             # 历史记忆管理
+│   └── metrics.py            # 监控指标
+├── api/                       # FastAPI 应用
 │   ├── main.py
 │   └── dependencies/
-│       └── auth.py
-├── frontend/              # Streamlit 界面
+│       └── auth.py           # JWT 认证
+├── frontend/                  # Streamlit 界面
 │   └── app.py
-├── config/                # 提示词模板
+├── config/                    # 配置与提示词
 │   └── prompts.py
-├── data/                  # 知识库文档（.txt）
-│   └── documents/
-├── docker/                # Docker Compose
-│   └── docker-compose.yml
-├── prometheus/            # Prometheus 配置
-│   └── prometheus.yml
+├── data/                      # 数据文件
+│   ├── documents/             # 知识库文档
+│   ├── teams/                # 队伍数据
+│   └── elements/             # 属性图标
 └── README.md
+```
 📄 许可
 本项目基于 MIT License 开源，仅供学习与展示使用。实际企业部署时请替换所有默认密码与密钥。
