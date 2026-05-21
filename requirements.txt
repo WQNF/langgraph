@@ -1,0 +1,7 @@
+text
+langgraph, langchain-openai, langchain-core
+fastapi, uvicorn[standard]
+streamlit
+pydantic, python-dotenv
+docker (合成在 docker-compose 里)
+# 数据库相关先不装，等 Phase 1 再加

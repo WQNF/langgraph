@@ -1,0 +1,131 @@
+{
+  "name": "迪莫",
+  "pokemons": [
+    {
+      "id": 1,
+      "national_number": "001",
+      "name": "迪莫",
+      "primary_type": "光系",
+      "secondary_type": null,
+      "species_total": 582,
+      "ability": "最好的伙伴：造成克制伤害后，获得攻防速+20%，并回复2能量。",
+      "created_at": "2026-05-15T09:32:05.282673",
+      "stats": {
+        "id": 1,
+        "pokemon_id": 1,
+        "hp": 120,
+        "attack": 80,
+        "defense": 105,
+        "sp_attack": 80,
+        "sp_defense": 105,
+        "speed": 92
+      },
+      "attribute_relations": "光系\n光系克制幽系，恶系；\n光系抵抗幻系，恶系；\n草系，冰系抵抗光系；\n幽系，草系克制光系。"
+    },
+    {
+      "id": 110,
+      "national_number": "110",
+      "name": "彩蝶鲨",
+      "primary_type": "水系",
+      "secondary_type": "翼系",
+      "species_total": 579,
+      "ability": "水翼推进：己方精灵每使用一次水系技能，自己入场时获得全技能能耗-1。",
+      "created_at": "2026-05-15T09:32:05.282673",
+      "stats": {
+        "id": 110,
+        "pokemon_id": 110,
+        "hp": 90,
+        "attack": 77,
+        "defense": 105,
+        "sp_attack": 77,
+        "sp_defense": 105,
+        "speed": 125
+      },
+      "attribute_relations": "水系+翼系\n我克制：水系技能【火系、地系、机械系】，翼系技能【草系、武系、虫系】\n我抵抗：火系、机械系、武系、虫系\n克制我：冰系，电系（强力克制）"
+    },
+    {
+      "id": 130,
+      "national_number": "130",
+      "name": "怖哭菇",
+      "primary_type": "幻系",
+      "secondary_type": null,
+      "species_total": 466,
+      "ability": "吸积盘：回合结束时，敌方获得2层星陨印记。",
+      "created_at": "2026-05-15T09:32:05.282673",
+      "stats": {
+        "id": 130,
+        "pokemon_id": 130,
+        "hp": 124,
+        "attack": 63,
+        "defense": 50,
+        "sp_attack": 69,
+        "sp_defense": 100,
+        "speed": 60
+      },
+      "attribute_relations": "幻系\n幻系克制毒系，武系；\n幻系抵抗武系，幻系；\n光系，机械系，幻系抵抗幻系；\n幽系，虫系克制幻系。"
+    },
+    {
+      "id": 155,
+      "national_number": "155",
+      "name": "针叶巡林",
+      "primary_type": "草系",
+      "secondary_type": "武系",
+      "species_total": 634,
+      "ability": "野性感官：应对成功后，下次行动先手+1。",
+      "created_at": "2026-05-15T09:32:05.282673",
+      "stats": {
+        "id": 155,
+        "pokemon_id": 155,
+        "hp": 105,
+        "attack": 139,
+        "defense": 128,
+        "sp_attack": 57,
+        "sp_defense": 100,
+        "speed": 105
+      },
+      "attribute_relations": "草系+武系\n我克制：草系技能【光系、地系、水系】，武系技能【普通系、地系、冰系、恶系、机械系】\n我抵抗：水系、地系（强力抵抗）、光系、电系、恶系\n克制我：火系、冰系、毒系、萌系、幻系，翼系（强力克制）"
+    },
+    {
+      "id": 152,
+      "national_number": "152",
+      "name": "圣羽翼王",
+      "primary_type": "翼系",
+      "secondary_type": null,
+      "species_total": 686,
+      "ability": "飓风：对本精灵的技能，若其他翼系精灵携带相同的技能，则获得迅捷。被敌方精灵击败时，自己额外损失1点魔力。",
+      "created_at": "2026-05-15T09:32:05.282673",
+      "stats": {
+        "id": 152,
+        "pokemon_id": 152,
+        "hp": 132,
+        "attack": 109,
+        "defense": 128,
+        "sp_attack": 109,
+        "sp_defense": 83,
+        "speed": 125
+      },
+      "attribute_relations": "翼系\n翼系克制草系，武系，虫系；\n翼系抵抗草系，武系，虫系；\n地系，龙系，电系，机械系抵抗翼系；\n电系，冰系克制翼系。"
+    },
+    {
+      "id": 191,
+      "national_number": "192",
+      "name": "棋绮后（白子）",
+      "primary_type": "武系",
+      "secondary_type": "地系",
+      "species_total": 508,
+      "ability": "渗透：己方精灵每使用1次武系或地系技能，自己入场时获得攻防+5%。",
+      "created_at": "2026-05-15T09:32:05.282673",
+      "stats": {
+        "id": 191,
+        "pokemon_id": 191,
+        "hp": 93,
+        "attack": 84,
+        "defense": 82,
+        "sp_attack": 84,
+        "sp_defense": 75,
+        "speed": 90
+      },
+      "attribute_relations": "地系+武系\n我克制：地系技能【火系、冰系、电系、毒系】，武系技能【普通系、地系、冰系、恶系、机械系】\n我抵抗：普通系、火系、电系、毒系、地系、虫系、恶系\n克制我：草系、水系、武系、冰系、机械系、萌系、幻系"
+    }
+  ]
+}
